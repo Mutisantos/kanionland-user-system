@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: kanionland-postgres
+    environment:
+      POSTGRES_DB: kanionland_user
+      POSTGRES_USER: kanionland
+      POSTGRES_PASSWORD: kanionland123
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kanionland -d kanionland_user"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:

@@ -1,0 +1,14 @@
+spring:
+  autoconfigure:
+    exclude:
+      - org.sqlite.hibernate.SQLiteDialect
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
