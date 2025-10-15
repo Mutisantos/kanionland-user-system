@@ -1,28 +1,47 @@
 package com.kanionland.user.bff.infrastructure.config;
 
-import static org.springframework.security.config.Customizer.withDefaults;
-
+import com.kanionland.user.bff.infrastructure.security.AuthenticationTokenFilter;
+import com.kanionland.user.bff.infrastructure.security.JwtTokenProvider;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
+
+  private final UserDetailsService userDetailsService;
+
+  @Value("${jwt.secret}")
+  private String jwtSecret;
+
+  @Value("${jwt.expiration}")
+  private long jwtExpirationInMs;
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
         .csrf(csrf -> csrf.disable())
+        .sessionManagement(
+            session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/users/sign-up").permitAll()
+            .requestMatchers("/users/sign-up", "/users/log-in").permitAll()
             .anyRequest().authenticated()
         )
-        .httpBasic(withDefaults());
+        .addFilterBefore(authenticationJwtTokenFilter(),
+            UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }
@@ -31,4 +50,21 @@ public class SecurityConfig {
   public PasswordEncoder passwordEncoder() {
     return new BCryptPasswordEncoder();
   }
+
+  @Bean
+  public JwtTokenProvider jwtTokenProvider() {
+    return new JwtTokenProvider();
+  }
+
+  @Bean
+  public AuthenticationTokenFilter authenticationJwtTokenFilter() {
+    return new AuthenticationTokenFilter(jwtTokenProvider(), userDetailsService);
+  }
+
+  @Bean
+  public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig)
+      throws Exception {
+    return authConfig.getAuthenticationManager();
+  }
+
 }
