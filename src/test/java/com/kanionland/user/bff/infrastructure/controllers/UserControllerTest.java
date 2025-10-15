@@ -8,10 +8,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.kanionland.user.bff.application.adapters.UserDetailsServiceAdapter;
 import com.kanionland.user.bff.application.ports.SignUpPort;
 import com.kanionland.user.bff.application.ports.UserLogInPort;
 import com.kanionland.user.bff.domain.commands.SignUpCommand;
+import com.kanionland.user.bff.domain.repositories.UserRepository;
 import com.kanionland.user.bff.infrastructure.config.SecurityConfig;
+import com.kanionland.user.bff.infrastructure.mappers.LogInRequestMapper;
 import com.kanionland.user.bff.infrastructure.mappers.SignUpRequestMapper;
 import com.kanionland.user.bff.infrastructure.requests.SignUpRequest;
 import org.junit.jupiter.api.Test;
@@ -26,7 +29,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.server.ResponseStatusException;
 
 @WebMvcTest(UserController.class)
-@ContextConfiguration(classes = {SecurityConfig.class, UserController.class})
+@ContextConfiguration(classes = {SecurityConfig.class, UserController.class,
+    UserDetailsServiceAdapter.class})
 @ActiveProfiles("test")
 class UserControllerTest {
 
@@ -43,7 +47,13 @@ class UserControllerTest {
   private SignUpRequestMapper signUpRequestMapper;
 
   @MockitoBean
+  private LogInRequestMapper logInRequestMapper;
+
+  @MockitoBean
   private UserLogInPort userLogInPort;
+
+  @MockitoBean
+  private UserRepository userRepository;
 
   @Test
   void whenValidInput_thenReturns201() throws Exception {

@@ -2,6 +2,8 @@ package com.kanionland.user.bff.infrastructure.controllers;
 
 import com.kanionland.user.bff.application.ports.SignUpPort;
 import com.kanionland.user.bff.application.ports.UserLogInPort;
+import com.kanionland.user.bff.domain.commands.LogInCommand;
+import com.kanionland.user.bff.infrastructure.mappers.LogInRequestMapper;
 import com.kanionland.user.bff.infrastructure.mappers.SignUpRequestMapper;
 import com.kanionland.user.bff.infrastructure.requests.LogInRequest;
 import com.kanionland.user.bff.infrastructure.requests.SignUpRequest;
@@ -24,6 +26,7 @@ public class UserController {
   private final SignUpPort signUpPort;
   private final UserLogInPort userLogInPort;
   private final SignUpRequestMapper signUpRequestMapper;
+  private final LogInRequestMapper loginRequestMapper;
 
   @PostMapping("/sign-up")
   @ResponseStatus(HttpStatus.CREATED)
@@ -33,8 +36,9 @@ public class UserController {
 
 
   @PostMapping("/log-in")
-  public ResponseEntity<JWTResponse> authenticateUser(@Valid @RequestBody LogInRequest loginRequest) {
-    return ResponseEntity.ok(userLogInPort.authenticateUser(loginRequest));
+  public ResponseEntity<JWTResponse> logIn(@Valid @RequestBody LogInRequest loginRequest) {
+    final LogInCommand logInCommand = loginRequestMapper.toSignUpCommand(loginRequest);
+    return ResponseEntity.ok(userLogInPort.userLogIn(logInCommand));
   }
 
 
