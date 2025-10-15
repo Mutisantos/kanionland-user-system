@@ -28,8 +28,9 @@ public class JwtTokenProvider {
     return Keys.hmacShaKeyFor(secret.getBytes());
   }
 
-  public String generateToken(String username) {
+  public String generateToken(String username, String role) {
     Map<String, Object> claims = new HashMap<>();
+    claims.put("role", role);
     return createToken(claims, username);
   }
 
@@ -46,6 +47,10 @@ public class JwtTokenProvider {
   public Boolean validateToken(String token, UserDetails userDetails) {
     final String username = extractUsername(token);
     return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+  }
+
+  public String getRoleFromToken(String token) {
+    return extractClaim(token, claims -> claims.get("role", String.class));
   }
 
   public String extractUsername(String token) {

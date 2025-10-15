@@ -33,9 +33,9 @@ public class UserLogInAdapter implements UserLogInPort {
         )
     );
     SecurityContextHolder.getContext().setAuthentication(authentication);
-    final String jwt = tokenProvider.generateToken(authentication.getName());
     final User user = userRepository.findByUsername(loginRequest.username())
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+    final String jwt = tokenProvider.generateToken(authentication.getName(), user.getRole());
     return JWTResponse.of(jwt, user);
   }
 }
