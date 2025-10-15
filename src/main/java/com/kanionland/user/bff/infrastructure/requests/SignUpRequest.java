@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 public record SignUpRequest(
-    @Size(min = 3, max = 50, message = "Username must be between 3 and 50 characters")
+    @Size(min = 6, max = 50, message = "Username must be between 6 and 50 characters")
     String username,
 
     @Email(message = "Email should be valid")

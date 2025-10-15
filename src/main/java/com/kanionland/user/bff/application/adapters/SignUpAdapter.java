@@ -20,7 +20,7 @@ public class SignUpAdapter implements SignUpPort {
 
   @Override
   public void registerSignUp(SignUpCommand request) {
-    if (userRepository.existsByEmailOrUsername(request.username(), request.email())) {
+    if (userRepository.existsByEmailOrUsername(request.email(), request.username())) {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST,
           "Username or email already exists"
