@@ -15,3 +15,7 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.security: DEBUG
+
+jwt:
+  secret: your-256-bit-secret
+  expiration: 86400000

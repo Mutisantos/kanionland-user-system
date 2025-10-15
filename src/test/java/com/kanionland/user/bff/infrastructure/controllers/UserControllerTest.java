@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kanionland.user.bff.application.ports.SignUpPort;
+import com.kanionland.user.bff.application.ports.UserLogInPort;
 import com.kanionland.user.bff.domain.commands.SignUpCommand;
 import com.kanionland.user.bff.infrastructure.config.SecurityConfig;
 import com.kanionland.user.bff.infrastructure.mappers.SignUpRequestMapper;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,6 +27,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @WebMvcTest(UserController.class)
 @ContextConfiguration(classes = {SecurityConfig.class, UserController.class})
+@ActiveProfiles("test")
 class UserControllerTest {
 
   @Autowired
@@ -38,6 +41,9 @@ class UserControllerTest {
 
   @MockitoBean
   private SignUpRequestMapper signUpRequestMapper;
+
+  @MockitoBean
+  private UserLogInPort userLogInPort;
 
   @Test
   void whenValidInput_thenReturns201() throws Exception {
