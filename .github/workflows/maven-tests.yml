@@ -38,7 +38,4 @@ jobs:
         run: mvn clean test -B
         env:
           SPRING_PROFILES_ACTIVE: test
-          SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/kanionland_user
-          SPRING_DATASOURCE_USERNAME: kanionland
-          SPRING_DATASOURCE_PASSWORD: kanionland123
           SPRING_JPA_HIBERNATE_DDL_AUTO: create-drop
