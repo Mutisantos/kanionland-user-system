@@ -1,4 +1,4 @@
-package com.kanionland.user.bff.repository;
+package com.kanionland.user.bff.domain.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
