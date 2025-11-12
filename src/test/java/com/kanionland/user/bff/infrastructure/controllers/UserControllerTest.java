@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.kanionland.user.bff.application.adapters.UserDetailsServiceAdapter;
 import com.kanionland.user.bff.application.ports.SignUpPort;
 import com.kanionland.user.bff.application.ports.UserLogInPort;
 import com.kanionland.user.bff.domain.commands.SignUpCommand;
@@ -17,6 +16,7 @@ import com.kanionland.user.bff.infrastructure.config.SecurityConfig;
 import com.kanionland.user.bff.infrastructure.mappers.LogInRequestMapper;
 import com.kanionland.user.bff.infrastructure.mappers.SignUpRequestMapper;
 import com.kanionland.user.bff.infrastructure.requests.SignUpRequest;
+import com.kanionland.user.bff.infrastructure.security.UserDetailsServiceAdapter;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
